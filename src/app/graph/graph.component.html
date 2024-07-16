@@ -1,0 +1,56 @@
+
+                <h2 class="text-center"> Detailed Customers Transactions Data</h2>
+                <div class="text-center m-5">
+                  <input type="text" id="searchAmount" class="form-control w-75 mx-auto my-3" placeholder="What Transaction amount are you searching for?" [(ngModel)]="amountInput">
+                <label for="searchAmount">Note:write the full amount to get the accurate results (e.g. 1000) </label>
+                </div>
+              <table class="table table-hover table-bordered text-center border border-1 shadow w-100" >
+                  <thead>
+                    <tr>
+                      <th>Transaction ID </th>
+                      <th>Customer ID</th>
+                      <th>Customer Name</th>
+                      <th>Transaction Date</th>
+                      <th>Transaction Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let t of transactions">
+                      <!-- <td *ngIf="t.id=='1'">{{ t.id }}</td> -->
+                      <td *ngIf="t.amount==amountInput?t.id:''">{{t.id}}</td>
+                      <td *ngIf="t.amount==amountInput?t.customer_id:''">{{ t.customer_id }}</td>
+          
+                      <ng-container *ngIf="t.customer_id==1;else second">
+                          <td *ngIf="t.amount==amountInput?'d-inline':''">Ahmed Ali</td>
+                      </ng-container>
+          
+                      <ng-template #second>
+                          <ng-container *ngIf="t.customer_id ==2;else third">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Aya Elsayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #third>
+                          <ng-container *ngIf="t.customer_id ==3;else fourth">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Mina Adel</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fourth>
+                          <ng-container *ngIf="t.customer_id ==4;else fifth">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Sarah Reda</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fifth>
+                          <ng-container *ngIf="t.customer_id ==5;">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Mohamed Sayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <td *ngIf="t.amount==amountInput?t.date:''">{{ t.date }}</td>
+                      <td *ngIf="t.amount==amountInput?t.amount:''">{{ t.amount }}</td>
+                     
+                    </tr>
+                  </tbody>
+                </table>

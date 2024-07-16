@@ -1,0 +1,240 @@
+
+
+<section class="m-2">
+
+  <div>
+      <h1 class="text-center">Customers Transactions Data Summary</h1>
+  
+      <h2 class="text-center"><mat-slide-toggle (click) = "toggleDisplay()" >View Detailed Customers Transactions Data?</mat-slide-toggle> </h2>
+
+      <input type="text" class="form-control w-75 mx-auto my-3" placeholder="What Name are you searching for?" [(ngModel)]="termInput">
+        
+
+    <table class="table table-hover table-bordered text-center border border-1 shadow" >
+      <thead>
+        <tr class="text-center position-center">
+          <th>Customer ID</th>
+          <th>Customer Name</th>
+          <th>Total Transaction Amount</th>
+          <th>Transactions Graph</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers | searchByname: termInput ">
+          <td>{{ customer.id }}</td>
+          <td>{{ customer.name }}</td>
+          <!-- <td  [attr.colspan]="count">{{ customerTransactionTotal[customer.id] || 0 }} </td> -->
+          <td>{{ customerTransactionTotal[customer.id] || 0 }} </td>
+          <!-- <td [attr.rowspan]="count"><mat-slide-toggle routerLink="" (click) = "toggleDisplay()" >View Transaction Details?</mat-slide-toggle> </td> -->
+          <!-- <td><button class="btn btn-secondary" (click)="graphDisplay()">View</button></td> -->
+          <td><button class="btn btn-secondary" id="sendCustomerID" (click)="selectCustomer(customer.id)">View</button>
+
+        </tr>
+      </tbody>
+    </table>
+  <!--  -->
+   <div class="container py-5 m-5">
+      <div class="row">
+          <div class="col-md-6">
+              
+                <h2 class="text-center"> Detailed Customers Transactions Data</h2>
+          
+              <table *ngIf = '!isShow' class="table table-hover table-bordered text-center border border-1 shadow w-100" >
+                  <thead>
+                    <tr>
+                      <th>Transaction ID </th>
+                      <th>Customer ID</th>
+                      <th>Customer Name</th>
+                      <th>Transaction Date</th>
+                      <th>Transaction Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let t of transactions">
+                      <td >{{t.id }}</td>
+                      <td>{{ t.customer_id }}</td>
+          
+                      <ng-container *ngIf="t.customer_id==1;else second">
+                          <td>Ahmed Ali</td>
+                      </ng-container>
+          
+                      <ng-template #second>
+                          <ng-container *ngIf="t.customer_id ==2;else third">
+                              <td>Aya Elsayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #third>
+                          <ng-container *ngIf="t.customer_id ==3;else fourth">
+                              <td>Mina Adel</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fourth>
+                          <ng-container *ngIf="t.customer_id ==4;else fifth">
+                              <td>Sarah Reda</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fifth>
+                          <ng-container *ngIf="t.customer_id ==5;">
+                              <td>Mohamed Sayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <td>{{ t.date }}</td>
+                      <td>{{ t.amount }}</td>
+                     
+                    </tr>
+                  </tbody>
+                </table>
+    
+           
+          </div>
+          <div class="col-md-6 text-center">
+              <h2 class="text-center ">Customers Transactions Graph</h2>
+              <div class=" m-5">
+                <app-chart *ngIf="sendCustomerID.length!=0 else noDisplay" [transactions]="sendCustomerID"></app-chart>
+              </div>
+           </div>
+
+           <ng-template #noData>
+            <!-- <h2>No Data Found</h2> -->
+
+           </ng-template>
+           <ng-template #noDisplay>
+            <!-- <h2>No Data Found</h2> -->
+           </ng-template>
+           
+      
+      </div>
+  
+   </div>
+
+  
+  </div>
+
+  <ng-template #displayTable>
+    <h2 class="text-center"> Detailed Customers Transactions Data</h2>
+                <div class="text-center m-5">
+                  <input type="text" id="searchAmount" class="form-control w-75 mx-auto my-3" placeholder="What Transaction amount are you searching for?" [(ngModel)]="amountInput">
+                <label for="searchAmount">Note:write the full amount to get the accurate results (e.g. 1000) </label>
+                </div>
+              <table class="table table-hover table-bordered text-center border border-1 shadow w-100" >
+                  <thead>
+                    <tr>
+                      <th>Transaction ID </th>
+                      <th>Customer ID</th>
+                      <th>Customer Name</th>
+                      <th>Transaction Date</th>
+                      <th>Transaction Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let t of transactions">
+                      <!-- <td *ngIf="t.id=='1'">{{ t.id }}</td> -->
+                      <td *ngIf="t.amount==amountInput?t.id:''">{{t.id}}</td>
+                      <td *ngIf="t.amount==amountInput?t.customer_id:''">{{ t.customer_id }}</td>
+          
+                      <ng-container *ngIf="t.customer_id==1;else second">
+                          <td *ngIf="t.amount==amountInput?'d-inline':''">Ahmed Ali</td>
+                      </ng-container>
+          
+                      <ng-template #second>
+                          <ng-container *ngIf="t.customer_id ==2;else third">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Aya Elsayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #third>
+                          <ng-container *ngIf="t.customer_id ==3;else fourth">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Mina Adel</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fourth>
+                          <ng-container *ngIf="t.customer_id ==4;else fifth">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Sarah Reda</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fifth>
+                          <ng-container *ngIf="t.customer_id ==5;">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Mohamed Sayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <td *ngIf="t.amount==amountInput?t.date:''">{{ t.date }}</td>
+                      <td *ngIf="t.amount==amountInput?t.amount:''">{{ t.amount }}</td>
+                     
+                    </tr>
+                  </tbody>
+                </table>
+  </ng-template>
+  
+  </section>
+  
+
+  <section class="text-center">
+    <!-- | searchBytransactionamount=amountInput -->
+    <h2 class="text-center"> Detailed Customers Transactions Data</h2>
+                <div class="text-center m-3">
+                  <input type="text" id="searchAmount" class="form-control w-75 mx-auto my-3" placeholder="What Transaction amount are you searching for?" [(ngModel)]="amountInput">
+                <label for="searchAmount">Note:write the full amount to get the accurate results (e.g. 1000) </label>
+                </div>
+              <table class="table table-hover table-bordered text-center border border-1 shadow w-100" >
+                  <thead>
+                    <tr>
+                      <th>Transaction ID </th>
+                      <th>Customer ID</th>
+                      <th>Customer Name</th>
+                      <th>Transaction Date</th>
+                      <th>Transaction Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let t of transactions">
+                      <!-- <td *ngIf="t.id=='1'">{{ t.id }}</td> -->
+                      <td *ngIf="t.amount==amountInput?t.id:''">{{t.id}}</td>
+                      <td *ngIf="t.amount==amountInput?t.customer_id:''">{{ t.customer_id }}</td>
+          
+                      <ng-container *ngIf="t.customer_id==1;else second">
+                          <td *ngIf="t.amount==amountInput?'d-inline':''">Ahmed Ali</td>
+                      </ng-container>
+          
+                      <ng-template #second>
+                          <ng-container *ngIf="t.customer_id ==2;else third">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Aya Elsayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #third>
+                          <ng-container *ngIf="t.customer_id ==3;else fourth">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Mina Adel</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fourth>
+                          <ng-container *ngIf="t.customer_id ==4;else fifth">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Sarah Reda</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <ng-template #fifth>
+                          <ng-container *ngIf="t.customer_id ==5;">
+                              <td *ngIf="t.amount==amountInput?'d-inline':''">Mohamed Sayed</td>
+                          </ng-container>
+                      </ng-template>
+          
+                      <td *ngIf="t.amount==amountInput?t.date:''">{{ t.date }}</td>
+                      <td *ngIf="t.amount==amountInput?t.amount:''">{{ t.amount }}</td>
+                     
+                    </tr>
+                  </tbody>
+                </table>
+    <ng-template #cx>
+
+    </ng-template>
+    
+  </section>
